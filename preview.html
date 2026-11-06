@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Capital City Mechanical — design preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#101418;--ink-2:#171d23;--ink-3:#1f272f;--line:#2b343d;--line-soft:#232b33;
+  --steel:#4a7b9d;--steel-bright:#6fa3c6;--steel-dim:#2c4658;--orange:#ff6a13;
+  --paper:#eef2f4;--paper-dim:#b9c4cc;--muted:#84929d;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Inter",-apple-system,sans-serif;
+  --step--1:.8125rem;--step-0:1rem;--step-1:1.125rem;
+  --step-2:clamp(1.35rem,1.1rem + 1vw,1.75rem);
+  --step-3:clamp(1.8rem,1.4rem + 2vw,2.75rem);
+  --step-4:clamp(2.4rem,1.6rem + 3.6vw,4.25rem);
+  --step-5:clamp(3rem,1.5rem + 6.5vw,7rem);
+  --shell:1240px;--gutter:clamp(1.25rem,4vw,3rem);--band:clamp(4rem,8vw,7rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--body);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:.95;letter-spacing:.01em;text-transform:uppercase;margin:0}
+h1{font-size:var(--step-5)}h2{font-size:var(--step-4)}h3{font-size:var(--step-3)}h4{font-size:var(--step-2)}
+p{margin:0 0 1rem}
+a{color:inherit}
+.shell{width:min(100% - (var(--gutter)*2),var(--shell));margin-inline:auto}
+.band{padding-block:var(--band)}
+.band--tint{background:var(--ink-2);border-block:1px solid var(--line-soft)}
+.lede{font-size:var(--step-1);color:var(--paper-dim);max-width:62ch}
+.dim{color:var(--muted)}
+.spec-tag{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--display);font-size:var(--step--1);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--steel-bright);margin:0 0 1rem}
+.spec-tag::before{content:"";width:2rem;height:2px;background:var(--orange);flex:none}
+.grid{display:grid;gap:clamp(1.25rem,2.5vw,2rem)}
+.grid--3{grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;font-family:var(--display);font-size:1.0625rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.6rem;border:2px solid transparent;border-radius:2px;cursor:pointer;text-decoration:none;transition:.18s}
+.btn--primary{background:var(--orange);color:#12161a}
+.btn--primary:hover{background:#ff8038}
+.btn--ghost{border-color:var(--line);color:var(--paper);background:transparent}
+.btn--ghost:hover{border-color:var(--steel);color:var(--steel-bright)}
+.card{background:var(--ink-3);border:1px solid var(--line);border-radius:3px;padding:clamp(1.4rem,2.4vw,2rem);transition:.2s}
+.card:hover{border-color:var(--steel-dim);transform:translateY(-3px)}
+.card h3,.card h4{margin-bottom:.5rem}
+.card p{color:var(--paper-dim);margin-bottom:0}
+
+/* masthead */
+.masthead{position:sticky;top:0;z-index:100;background:rgba(16,20,24,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+.masthead__alert{display:flex;align-items:center;justify-content:center;gap:.75rem;background:var(--steel-dim);font-family:var(--display);font-size:.8125rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:.45rem 1rem}
+.masthead__alert a{color:#fff;text-decoration:none;border-bottom:2px solid var(--orange)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.masthead__bar{display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);padding-block:.85rem}
+.wordmark{display:flex;align-items:center;gap:.7rem;text-decoration:none;margin-right:auto}
+.wordmark__mark{display:grid;place-items:center;width:2.6rem;height:2.6rem;background:var(--orange);color:#12161a;font-family:var(--display);font-weight:700;font-size:1.25rem;border-radius:2px;flex:none}
+.wordmark__text{display:flex;flex-direction:column;font-family:var(--display);text-transform:uppercase;line-height:1}
+.wordmark__text strong{font-size:1.3rem}
+.wordmark__text em{font-style:normal;font-size:.8rem;font-weight:500;letter-spacing:.34em;color:var(--steel-bright)}
+.nav{display:flex;gap:clamp(1rem,2.2vw,2rem)}
+.nav a{font-family:var(--display);font-size:1.0625rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--paper-dim);padding-block:.35rem;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--paper)}
+.nav a[aria-current]{color:var(--paper);border-bottom-color:var(--orange)}
+@media(max-width:900px){.nav,.masthead .btn{display:none}}
+
+/* hero */
+.hero{position:relative;padding-block:clamp(3.5rem,8vw,7rem) clamp(1rem,3vw,2rem);background:radial-gradient(ellipse at 15% 0%,rgba(74,123,157,.22),transparent 60%),var(--ink)}
+.hero__inner{display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:end}
+@media(max-width:940px){.hero__inner{grid-template-columns:1fr}}
+.hero h1{margin-bottom:1.5rem}
+.accent{color:var(--orange)}
+.hero__actions{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2rem}
+.dispatch{background:var(--ink-3);border:1px solid var(--line);border-top:3px solid var(--orange);border-radius:3px;padding:clamp(1.4rem,2.5vw,2rem)}
+.dispatch__label{font-family:var(--display);font-size:.8125rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.dispatch__phone{font-family:var(--display);font-size:clamp(2rem,3.4vw,2.6rem);font-weight:700;line-height:1;margin-bottom:1.25rem}
+.dispatch__phone a{text-decoration:none}
+.dispatch dl{margin:0;display:grid;gap:.75rem}
+.dispatch dl>div{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;border-top:1px dashed var(--line);padding-top:.75rem}
+.dispatch dt{font-size:.875rem;color:var(--muted)}
+.dispatch dd{margin:0;font-family:var(--display);font-size:1.05rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-align:right}
+
+/* marquee — signature */
+.marquee{position:relative;width:118vw;left:50%;transform:translateX(-50%) rotate(-2.4deg);overflow:hidden;padding-block:.7rem;border-block:2px solid rgba(0,0,0,.35);margin-block:clamp(2rem,5vw,3.5rem);background:var(--orange);color:#12161a}
+.marquee__track{display:flex;width:max-content;animation:slide 42s linear infinite}
+.marquee__item{display:inline-flex;align-items:center;gap:1.75rem;padding-right:1.75rem;font-family:var(--display);font-size:clamp(1.05rem,2vw,1.5rem);font-weight:700;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.marquee__item b{font-size:.6em;opacity:.5}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.band__head{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:end;justify-content:space-between;margin-bottom:2.5rem}
+.sectors{margin-top:2.5rem}
+.sector__key{font-family:var(--display);font-size:.8125rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem}
+.svc{text-decoration:none;display:flex;flex-direction:column}
+.svc__more{margin-top:1.25rem;font-family:var(--display);font-size:.95rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--steel-bright)}
+.proof{display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start}
+@media(max-width:880px){.proof{grid-template-columns:1fr}}
+.ticks{list-style:none;margin:1.25rem 0 0;padding:0;display:grid;gap:.85rem}
+.ticks li{position:relative;padding-left:2rem;color:var(--paper-dim)}
+.ticks li::before{content:"";position:absolute;left:0;top:.65em;width:1.1rem;height:2px;background:var(--orange)}
+.stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.stat{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(1.25rem,2.5vw,1.75rem)}
+.stat strong{display:block;font-family:var(--display);font-size:clamp(2.4rem,5vw,3.4rem);font-weight:700;line-height:1;color:var(--steel-bright)}
+.stat span{font-size:.8125rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cta-band{background:var(--steel-dim);padding-block:clamp(2.5rem,5vw,4rem)}
+.cta-band__inner{display:flex;flex-wrap:wrap;gap:2rem;align-items:center;justify-content:space-between}
+.cta-band .btn--ghost{border-color:rgba(255,255,255,.35)}
+.foot{background:var(--ink-2);border-top:3px solid var(--orange);padding:clamp(3rem,6vw,4.5rem) 0 1.5rem}
+.foot__legal{border-top:1px solid var(--line-soft);margin-top:2.5rem;padding-top:1.5rem;font-size:.8125rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.foot__name{font-family:var(--display);font-size:1.7rem;font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:.75rem}
+.foot__phone{font-family:var(--display);font-size:1.5rem;font-weight:700;color:var(--orange);text-decoration:none}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+.note{background:var(--ink-3);border-left:4px solid var(--steel);padding:1rem 1.25rem;font-size:.9rem;color:var(--paper-dim)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__alert"><span class="dot"></span><span>Emergency crews on call 24/7</span><a href="tel:+16148718100">(614) 871-8100</a></div>
+  <div class="shell masthead__bar">
+    <a class="wordmark" href="#"><span class="wordmark__mark">CC</span><span class="wordmark__text"><strong>Capital City</strong><em>Mechanical</em></span></a>
+    <nav class="nav">
+      <a href="#" aria-current="page">Home</a><a href="#">Services</a><a href="#">Careers</a><a href="#">About</a><a href="#">Contact</a>
+    </nav>
+    <a class="btn btn--primary" href="#">Request service</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="shell hero__inner">
+    <div>
+      <p class="spec-tag">Serving Central Ohio since 2001</p>
+      <h1>We keep the<br><span class="accent">water moving</span><br>in Central Ohio</h1>
+      <p class="lede">Capital City Mechanical runs plumbing, mechanical, and excavation work for houses, buildings, and plants — from a leaking water heater to a process line that cannot go down.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#">Request service</a>
+        <a class="btn btn--ghost" href="tel:+16148718100">Call (614) 871-8100</a>
+      </div>
+    </div>
+    <aside class="dispatch">
+      <p class="dispatch__label">Dispatch</p>
+      <p class="dispatch__phone"><a href="tel:+16148718100">(614) 871-8100</a></p>
+      <dl>
+        <div><dt>Emergency crews</dt><dd>24 hours, 7 days</dd></div>
+        <div><dt>Office hours</dt><dd>Mon–Fri, 8–5</dd></div>
+        <div><dt>Service area</dt><dd>Central Ohio</dd></div>
+        <div><dt>Crew</dt><dd>Licensed, background checked</dd></div>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="track"></div>
+</div>
+
+<section class="band">
+  <div class="shell">
+    <p class="spec-tag">Who we work for</p>
+    <h2>Three kinds of job site</h2>
+    <p class="lede">The trade is the same. The scheduling, the paperwork, and the tolerance for downtime are not — so we staff each one differently.</p>
+    <div class="grid grid--3 sectors">
+      <article class="card"><p class="sector__key">Residential</p><h3>Houses</h3><p>Water heaters, repipes, and the 2 a.m. leak under the slab. Flat pricing before the wrench comes out.</p></article>
+      <article class="card"><p class="sector__key">Commercial</p><h3>Buildings</h3><p>Schools, offices, and retail build-outs — rough-in through final inspection, on the general's schedule.</p></article>
+      <article class="card"><p class="sector__key">Industrial</p><h3>Plants</h3><p>Process piping and certified welding for floors like Honda, Scotts, and Coca-Cola where downtime is the real cost.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="band band--tint">
+  <div class="shell">
+    <div class="band__head">
+      <div><p class="spec-tag">What we do</p><h2>Services</h2></div>
+      <a class="btn btn--ghost" href="#">See all services</a>
+    </div>
+    <div class="grid grid--3" id="services"></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="shell proof">
+    <div>
+      <p class="spec-tag">Why crews get called back</p>
+      <h2>No mystery invoices</h2>
+      <p class="lede" style="margin-top:1rem">You get the price before the work starts, a photo of what we found, and a crew that cleans up the site. That is the whole trick.</p>
+      <ul class="ticks">
+        <li>Pricing quoted up front, not tallied after</li>
+        <li>Camera and locating before we dig, not after</li>
+        <li>Licensed, drug-tested, background-checked technicians</li>
+        <li>One point of contact from quote through final walkthrough</li>
+      </ul>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>2001</strong><span>Year founded</span></div>
+      <div class="stat"><strong>40+</strong><span>Employees</span></div>
+      <div class="stat"><strong>24/7</strong><span>Emergency dispatch</span></div>
+      <div class="stat"><strong>3</strong><span>Sectors served</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="shell cta-band__inner">
+    <div><h2>Got a job for us?</h2><p class="lede">Tell us what is going on and we will get a truck on the schedule.</p></div>
+    <div style="display:flex;gap:.85rem;flex-wrap:wrap"><a class="btn btn--primary" href="#">Request service</a><a class="btn btn--ghost" href="#">We're hiring</a></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="shell">
+    <p class="spec-tag">Grove City, Ohio</p>
+    <p class="foot__name">Capital City Mechanical</p>
+    <p class="dim">Plumbing, mechanical, and excavation for Central Ohio since 2001.</p>
+    <p><a class="foot__phone" href="tel:+16148718100">(614) 871-8100</a></p>
+    <p class="note">This is a static preview of the home page theme only. The real site runs on Astro with React islands and pulls services, job postings, and form handling from the Spring Boot API.</p>
+    <div class="foot__legal"><span>© 2026 Capital City Mechanical.</span><span>Design preview</span></div>
+  </div>
+</footer>
+
+<script>
+const items = ["Residential plumbing","Commercial plumbing","Industrial mechanical","Drain cleaning","Hydro excavation","Heating & cooling","Industrial welding","24/7 service"];
+document.getElementById('track').innerHTML = [...items, ...items]
+  .map(i => `<span class="marquee__item">${i}<b>◆</b></span>`).join('');
+
+const services = [
+  ["Residential plumbing","Repairs, repipes, water heaters, and fixture installs for houses across Central Ohio."],
+  ["Commercial plumbing","Build-outs, tenant improvements, and scheduled maintenance for schools, offices, and retail."],
+  ["Industrial mechanical","Process piping and mechanical systems for manufacturing floors that cannot afford downtime."],
+  ["Drain cleaning","Cabling, hydro jetting, and camera inspection to find the blockage instead of guessing at it."],
+  ["Excavation & hydro excavation","Water and sewer line replacement, plus vacuum excavation where digging blind is not an option."],
+  ["Heating & cooling","Furnaces, air conditioning, and refrigeration — installed, serviced, and kept running."]
+];
+document.getElementById('services').innerHTML = services
+  .map(([n,s]) => `<a class="card svc" href="#"><h4>${n}</h4><p>${s}</p><span class="svc__more">Details →</span></a>`).join('');
+</script>
+</body>
+</html>
