@@ -1,0 +1,218 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHead from "../components/PageHead.astro";
+import ServiceMarquee from "../components/ServiceMarquee.astro";
+import { getJson } from "../lib/api.js";
+import { SERVICES, MARQUEE_ITEMS } from "../data/site.js";
+
+const services = await getJson("/api/services", SERVICES);
+
+const process = [
+  {
+    title: "Call or send a request",
+    body: "Tell us the address, the symptom, and how soon you need someone. Emergencies go straight to dispatch.",
+  },
+  {
+    title: "We diagnose on site",
+    body: "Camera, meter, or locator first. You see what we see before anyone quotes a number.",
+  },
+  {
+    title: "You approve the price",
+    body: "Written scope and price. Nothing gets cut, dug, or replaced until you say go.",
+  },
+  {
+    title: "We finish and clean up",
+    body: "Work tested, site restored, and photos of what was replaced left with the invoice.",
+  },
+];
+---
+
+<BaseLayout
+  title="Services"
+  description="Plumbing, drain cleaning, excavation, and mechanical services for residential, commercial, and industrial customers in Central Ohio."
+>
+  <PageHead
+    eyebrow="What we do"
+    title="Services"
+    lede="One shop for the pipe, the equipment it feeds, and the ground it runs through. Residential, commercial, and industrial."
+  />
+
+  <section class="band">
+    <div class="shell">
+      <div class="svc-list">
+        {
+          services.map((s) => (
+            <article class="svc-item" id={s.slug}>
+              <div class="svc-item__head">
+                <span class="svc-item__cat">
+                  {s.category === "ALL" ? "All sectors" : s.category.toLowerCase()}
+                </span>
+                <h3>{s.name}</h3>
+              </div>
+              <div class="svc-item__body">
+                <p class="lede">{s.summary}</p>
+                <ul class="ticks">
+                  {(s.points ?? []).map((p) => <li>{p}</li>)}
+                </ul>
+                <a class="btn btn--ghost svc-item__cta" href="/contact">
+                  Request this service
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <ServiceMarquee items={MARQUEE_ITEMS} tone="steel" />
+
+  <section class="band band--tint">
+    <div class="shell">
+      <p class="spec-tag">How a job runs</p>
+      <h2>Four steps, in this order</h2>
+      <p class="lede">
+        Numbered because the order matters — we do not price work we have not
+        looked at.
+      </p>
+
+      <ol class="steps">
+        {
+          process.map((step, i) => (
+            <li class="step">
+              <span class="step__num">{String(i + 1).padStart(2, "0")}</span>
+              <h4>{step.title}</h4>
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shell emergency">
+      <div>
+        <p class="spec-tag">Emergency work</p>
+        <h2>Water where it should not be</h2>
+        <p class="lede">
+          Shut the main off if you can reach it, then call. Crews run nights,
+          weekends, and holidays for active leaks, sewer backups, and burst
+          lines.
+        </p>
+      </div>
+      <a class="btn btn--primary" href="tel:+16148718100">Call (614) 871-8100</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .svc-list {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .svc-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 8rem;
+  }
+
+  @media (max-width: 860px) {
+    .svc-item {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .svc-item__cat {
+    display: block;
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+
+  .svc-item__cta {
+    margin-top: 1.5rem;
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .ticks li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--paper-dim);
+  }
+
+  .ticks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--steel);
+  }
+
+  .steps {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    counter-reset: step;
+  }
+
+  .step {
+    border-top: 2px solid var(--line);
+    padding-top: 1.25rem;
+  }
+
+  .step__num {
+    display: block;
+    font-family: var(--display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--steel-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .step h4 {
+    margin-bottom: 0.4rem;
+  }
+
+  .step p {
+    color: var(--paper-dim);
+    margin: 0;
+  }
+
+  .emergency {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background: var(--ink-3);
+    border-left: 4px solid var(--orange);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .emergency > div {
+    max-width: 48ch;
+  }
+</style>

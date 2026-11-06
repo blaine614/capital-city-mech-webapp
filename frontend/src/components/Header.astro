@@ -1,0 +1,149 @@
+---
+import MobileNav from "./MobileNav.jsx";
+import { NAV_LINKS, PHONE, PHONE_HREF } from "../data/site.js";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="masthead">
+  <div class="masthead__alert">
+    <span class="masthead__alert-dot" aria-hidden="true"></span>
+    <span>Emergency crews on call 24/7</span>
+    <a href={PHONE_HREF}>{PHONE}</a>
+  </div>
+
+  <div class="shell masthead__bar">
+    <a class="wordmark" href="/" aria-label="Capital City Mechanical — home">
+      <img
+        class="wordmark__logo"
+        src="/logo.png"
+        alt="Capital City Mechanical"
+        width="720"
+        height="276"
+        fetchpriority="high"
+      />
+    </a>
+
+    <nav class="masthead__nav" aria-label="Main">
+      {
+        NAV_LINKS.map((link) => (
+          <a href={link.href} aria-current={path === link.href ? "page" : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a class="btn btn--primary masthead__cta" href="/contact">Request service</a>
+
+    <MobileNav client:load links={NAV_LINKS} phone={PHONE} phoneHref={PHONE_HREF} />
+  </div>
+</header>
+
+<style>
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(16, 20, 24, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .masthead__alert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: var(--steel-dim);
+    color: var(--paper);
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.45rem 1rem;
+  }
+
+  .masthead__alert a {
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 2px solid var(--orange);
+  }
+
+  .masthead__alert-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .masthead__bar {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding-block: 0.85rem;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: auto;
+    /* The lockup is wide; constrain by height so the bar stays compact. */
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .wordmark__logo {
+    width: auto;
+    height: clamp(2.9rem, 6vw, 3.9rem);
+    /* The logo carries its own black plaque, so it reads on the dark bar
+       without a backing panel. */
+  }
+
+  .masthead__nav {
+    display: flex;
+    gap: clamp(1rem, 2.2vw, 2rem);
+  }
+
+  .masthead__nav a {
+    font-family: var(--display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--paper-dim);
+    padding-block: 0.35rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.16s ease, border-color 0.16s ease;
+  }
+
+  .masthead__nav a:hover {
+    color: var(--paper);
+  }
+
+  .masthead__nav a[aria-current="page"] {
+    color: var(--paper);
+    border-bottom-color: var(--orange);
+  }
+
+  @media (max-width: 900px) {
+    .masthead__nav,
+    .masthead__cta {
+      display: none;
+    }
+  }
+</style>

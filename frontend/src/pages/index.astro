@@ -1,0 +1,424 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ServiceMarquee from "../components/ServiceMarquee.astro";
+import { getJson } from "../lib/api.js";
+import { SERVICES, MARQUEE_ITEMS, PHONE, PHONE_HREF } from "../data/site.js";
+
+const services = await getJson("/api/services", SERVICES);
+
+const sectors = [
+  {
+    key: "Residential",
+    line: "Houses",
+    body: "Water heaters, repipes, and the 2 a.m. leak under the slab. Flat pricing before the wrench comes out.",
+  },
+  {
+    key: "Commercial",
+    line: "Buildings",
+    body: "Schools, offices, and retail build-outs — rough-in through final inspection, on the general's schedule.",
+  },
+  {
+    key: "Industrial",
+    line: "Plants",
+    body: "Process piping and certified welding for floors like Honda, Scotts, and Coca-Cola where downtime is the real cost.",
+  },
+];
+---
+
+<BaseLayout title="Plumbing, Mechanical & Excavation in Central Ohio">
+  <section class="hero">
+    <div class="shell hero__inner">
+      <div class="hero__copy">
+        <p class="spec-tag">Serving Central Ohio since 2001</p>
+        <h1>
+          We keep the<br />
+          <span class="hero__accent">water moving</span><br />
+          in Central Ohio
+        </h1>
+        <p class="lede">
+          Capital City Mechanical runs plumbing, mechanical, and excavation work
+          for houses, buildings, and plants — from a leaking water heater to a
+          process line that cannot go down.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/contact">Request service</a>
+          <a class="btn btn--ghost" href={PHONE_HREF}>Call {PHONE}</a>
+        </div>
+      </div>
+
+      <aside class="dispatch" aria-label="Dispatch summary">
+        <p class="dispatch__label">Dispatch</p>
+        <p class="dispatch__phone"><a href={PHONE_HREF}>{PHONE}</a></p>
+        <dl class="dispatch__list">
+          <div>
+            <dt>Emergency crews</dt>
+            <dd>24 hours, 7 days</dd>
+          </div>
+          <div>
+            <dt>Office hours</dt>
+            <dd>Mon–Fri, 8–5</dd>
+          </div>
+          <div>
+            <dt>Service area</dt>
+            <dd>Central Ohio</dd>
+          </div>
+          <div>
+            <dt>Crew</dt>
+            <dd>Licensed, background checked</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <ServiceMarquee items={MARQUEE_ITEMS} />
+
+  <section class="band">
+    <div class="shell">
+      <p class="spec-tag">Who we work for</p>
+      <h2>Three kinds of job site</h2>
+      <p class="lede">
+        The trade is the same. The scheduling, the paperwork, and the tolerance
+        for downtime are not — so we staff each one differently.
+      </p>
+
+      <div class="grid grid--3 sectors">
+        {
+          sectors.map((s) => (
+            <article class="card sector">
+              <p class="sector__key">{s.key}</p>
+              <h3>{s.line}</h3>
+              <p>{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--tint">
+    <div class="shell">
+      <div class="band__head">
+        <div>
+          <p class="spec-tag">What we do</p>
+          <h2>Services</h2>
+        </div>
+        <a class="btn btn--ghost" href="/services">See all services</a>
+      </div>
+
+      <div class="grid grid--3">
+        {
+          services.slice(0, 6).map((s) => (
+            <a class="card svc" href={`/services#${s.slug}`}>
+              <h4>{s.name}</h4>
+              <p>{s.summary}</p>
+              <span class="svc__more">Details →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shell proof">
+      <div>
+        <p class="spec-tag">Why crews get called back</p>
+        <h2>No mystery invoices</h2>
+        <div class="stack">
+          <p class="lede">
+            You get the price before the work starts, a photo of what we found,
+            and a crew that cleans up the site. That is the whole trick.
+          </p>
+          <ul class="ticks">
+            <li>Pricing quoted up front, not tallied after</li>
+            <li>Camera and locating before we dig, not after</li>
+            <li>Licensed, drug-tested, background-checked technicians</li>
+            <li>One point of contact from quote through final walkthrough</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong>2001</strong>
+          <span>Year founded</span>
+        </div>
+        <div class="stat">
+          <strong>40+</strong>
+          <span>Employees</span>
+        </div>
+        <div class="stat">
+          <strong>24/7</strong>
+          <span>Emergency dispatch</span>
+        </div>
+        <div class="stat">
+          <strong>3</strong>
+          <span>Sectors served</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="shell cta-band__inner">
+      <div>
+        <h2>Got a job for us?</h2>
+        <p class="lede">
+          Tell us what is going on and we will get a truck on the schedule.
+        </p>
+      </div>
+      <div class="cta-band__actions">
+        <a class="btn btn--primary" href="/contact">Request service</a>
+        <a class="btn btn--ghost" href="/careers">We're hiring</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(3.5rem, 8vw, 7rem) clamp(1rem, 3vw, 2rem);
+    background:
+      radial-gradient(
+        ellipse at 15% 0%,
+        rgba(74, 123, 157, 0.22),
+        transparent 60%
+      ),
+      var(--ink);
+  }
+
+  /* Faint pipe-run rule behind the headline — structural, not decorative:
+     it marks the baseline the type sits on. */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--line) 20%,
+      var(--line) 80%,
+      transparent
+    );
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    align-items: end;
+  }
+
+  @media (max-width: 940px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero__accent {
+    color: var(--orange);
+  }
+
+  .hero h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+
+  .dispatch {
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--orange);
+    border-radius: 3px;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+  }
+
+  .dispatch__label {
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .dispatch__phone {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .dispatch__phone a {
+    text-decoration: none;
+  }
+
+  .dispatch__list {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .dispatch__list > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px dashed var(--line);
+    padding-top: 0.75rem;
+  }
+
+  .dispatch__list dt {
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .dispatch__list dd {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: right;
+    color: var(--paper);
+  }
+
+  .band__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+
+  .sectors {
+    margin-top: 2.5rem;
+  }
+
+  .sector__key {
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+
+  .svc {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .svc__more {
+    margin-top: 1.25rem;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-bright);
+  }
+
+  .proof {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 880px) {
+    .proof {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .ticks li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--paper-dim);
+  }
+
+  .ticks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--orange);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .stat {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  .stat strong {
+    display: block;
+    font-family: var(--display);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--steel-bright);
+  }
+
+  .stat span {
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cta-band {
+    background: var(--steel-dim);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .cta-band__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cta-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  .cta-band .btn--ghost {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+</style>

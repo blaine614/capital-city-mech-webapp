@@ -1,0 +1,274 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHead from "../components/PageHead.astro";
+import ApplyForm from "../components/ApplyForm.jsx";
+import { getJson } from "../lib/api.js";
+
+const FALLBACK_POSTINGS = [
+  {
+    id: 1,
+    title: "Service Plumber",
+    department: "Residential Service",
+    location: "Grove City, OH",
+    employmentType: "Full-time",
+    description:
+      "Run residential service calls out of a stocked truck. Diagnose, quote, and repair with a dispatcher backing you up.",
+    requirements: [
+      "Ohio journeyman card or 4+ years in the trade",
+      "Clean driving record",
+      "Comfortable pricing work in front of the customer",
+    ],
+  },
+  {
+    id: 2,
+    title: "Commercial Pipefitter",
+    department: "Commercial Construction",
+    location: "Central Ohio job sites",
+    employmentType: "Full-time",
+    description:
+      "Rough-in and trim on school, office, and retail projects. Read prints, lay out from benchmarks, and hit the general's schedule.",
+    requirements: [
+      "3+ years commercial rough-in",
+      "Print reading and layout",
+      "OSHA 10 or willing to get it",
+    ],
+  },
+  {
+    id: 3,
+    title: "Excavation Operator",
+    department: "Excavation",
+    location: "Central Ohio job sites",
+    employmentType: "Full-time",
+    description:
+      "Run mini-ex and hydro excavation equipment on water and sewer replacements. Dig around live utilities without hitting them.",
+    requirements: [
+      "2+ years operating experience",
+      "CDL a plus, not required",
+      "Utility locating familiarity",
+    ],
+  },
+  {
+    id: 4,
+    title: "Apprentice Plumber",
+    department: "Apprenticeship",
+    location: "Grove City, OH",
+    employmentType: "Full-time, paid training",
+    description:
+      "Start with no experience. You work alongside a journeyman, we pay for schooling, and you leave with a card.",
+    requirements: [
+      "18 or older with a valid license",
+      "Show up on time and lift 50 lbs",
+      "Willing to attend class",
+    ],
+  },
+];
+
+const postings = await getJson("/api/careers/postings", FALLBACK_POSTINGS);
+
+const benefits = [
+  { label: "Health, dental, vision", detail: "Coverage starts the first of the month after 30 days." },
+  { label: "401(k) with match", detail: "Company match, vested on a real schedule." },
+  { label: "Paid schooling", detail: "Apprenticeship tuition and continuing education covered." },
+  { label: "Take-home truck", detail: "Stocked and fueled for service technicians." },
+  { label: "Tool allowance", detail: "Annual budget so you are not buying your own bits." },
+  { label: "Paid time off", detail: "Vacation, holidays, and sick time that accrue from day one." },
+];
+---
+
+<BaseLayout
+  title="Careers"
+  description="Plumbing, pipefitting, and excavation jobs in Central Ohio. Paid apprenticeship, health coverage, 401(k) match, and take-home trucks."
+>
+  <PageHead
+    eyebrow="Join the crew"
+    title="Careers"
+    lede="Well-treated, well-trained, resource-rich crews do better work. That is not a slogan here — it is why the tool allowance and the schooling are line items in the budget."
+  />
+
+  <section class="band">
+    <div class="shell">
+      <p class="spec-tag">What we put behind you</p>
+      <h2>Benefits</h2>
+      <div class="grid grid--3 bene">
+        {
+          benefits.map((b) => (
+            <div class="card">
+              <h4>{b.label}</h4>
+              <p>{b.detail}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--tint">
+    <div class="shell">
+      <p class="spec-tag">{postings.length} open roles</p>
+      <h2>Open positions</h2>
+
+      <div class="jobs">
+        {
+          postings.map((job) => (
+            <article class="job">
+              <div class="job__meta">
+                <h3>{job.title}</h3>
+                <ul class="job__tags">
+                  <li>{job.department}</li>
+                  <li>{job.location}</li>
+                  <li>{job.employmentType}</li>
+                </ul>
+              </div>
+              <div class="job__body">
+                <p>{job.description}</p>
+                {job.requirements?.length > 0 && (
+                  <>
+                    <p class="job__reqhead">What you need</p>
+                    <ul class="ticks">
+                      {job.requirements.map((r) => <li>{r}</li>)}
+                    </ul>
+                  </>
+                )}
+                <a class="btn btn--ghost job__cta" href="#apply">
+                  Apply for this role
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="apply">
+    <div class="shell apply-band">
+      <div>
+        <p class="spec-tag">Application</p>
+        <h2>Tell us what you can run</h2>
+        <p class="lede">
+          No resume required. If you have one, drop a link. What matters more is
+          the work you have done and the card you hold.
+        </p>
+        <p class="dim">
+          Capital City Mechanical is an equal opportunity employer. Hiring
+          decisions are based on the work, not on race, color, religion, sex,
+          national origin, age, disability, or veteran status.
+        </p>
+      </div>
+
+      <div class="apply-band__form">
+        <ApplyForm client:visible postings={postings} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .bene {
+    margin-top: 2.5rem;
+  }
+
+  .jobs {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .job {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (max-width: 860px) {
+    .job {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .job__tags {
+    list-style: none;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .job__tags li {
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--steel-bright);
+    border: 1px solid var(--steel-dim);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .job__body p {
+    color: var(--paper-dim);
+  }
+
+  .job__reqhead {
+    font-family: var(--display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .job__cta {
+    margin-top: 1.5rem;
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .ticks li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--paper-dim);
+  }
+
+  .ticks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--orange);
+  }
+
+  .apply-band {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+    scroll-margin-top: 8rem;
+  }
+
+  @media (max-width: 900px) {
+    .apply-band {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .apply-band__form {
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--orange);
+    border-radius: 3px;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+  }
+</style>

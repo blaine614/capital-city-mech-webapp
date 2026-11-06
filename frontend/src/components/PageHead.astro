@@ -1,0 +1,33 @@
+---
+const { eyebrow, title, lede } = Astro.props;
+---
+
+<section class="phead">
+  <div class="shell">
+    <p class="spec-tag">{eyebrow}</p>
+    <h1>{title}</h1>
+    {lede && <p class="lede phead__lede">{lede}</p>}
+  </div>
+</section>
+
+<style>
+  .phead {
+    padding-block: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 3vw, 2.5rem);
+    background:
+      radial-gradient(
+        ellipse at 10% 0%,
+        rgba(74, 123, 157, 0.18),
+        transparent 62%
+      ),
+      var(--ink);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .phead h1 {
+    font-size: var(--step-4);
+  }
+
+  .phead__lede {
+    margin-top: 1.25rem;
+  }
+</style>

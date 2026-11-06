@@ -1,0 +1,166 @@
+---
+import {
+  NAV_LINKS,
+  PHONE,
+  PHONE_HREF,
+  EMAIL,
+  ADDRESS,
+  HOURS,
+  SERVICES,
+} from "../data/site.js";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="shell foot__grid">
+    <div>
+      <p class="spec-tag">Grove City, Ohio</p>
+      <p class="foot__name">Capital City Mechanical</p>
+      <p class="dim">
+        Plumbing, mechanical, and excavation for Central Ohio since 2001.
+      </p>
+      <address class="foot__address">
+        {ADDRESS.street}<br />
+        {ADDRESS.city}, {ADDRESS.state} {ADDRESS.zip}
+      </address>
+      <p>
+        <a class="foot__phone" href={PHONE_HREF}>{PHONE}</a><br />
+        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+      </p>
+    </div>
+
+    <div>
+      <h4 class="foot__head">Pages</h4>
+      <ul class="foot__list">
+        {NAV_LINKS.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="foot__head">Services</h4>
+      <ul class="foot__list">
+        {SERVICES.map((s) => <li><a href={`/services#${s.slug}`}>{s.name}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="foot__head">Hours</h4>
+      <ul class="foot__list foot__list--plain">
+        {
+          HOURS.map((h) => (
+            <li>
+              <span>{h.days}</span>
+              <em>{h.time}</em>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--primary foot__cta" href="/contact">Request service</a>
+    </div>
+  </div>
+
+  <div class="shell foot__legal">
+    <span>© {year} Capital City Mechanical. All rights reserved.</span>
+    <span>Ohio contractor license #PL-000000</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--ink-2);
+    border-top: 3px solid var(--orange);
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .foot__grid {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+
+  .foot__grid > div:first-child {
+    grid-column: span 1;
+    max-width: 28rem;
+  }
+
+  .foot__name {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .foot__address {
+    font-style: normal;
+    color: var(--paper-dim);
+    margin-block: 1rem;
+  }
+
+  .foot__phone {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--orange);
+    text-decoration: none;
+  }
+
+  .foot__head {
+    font-size: 1.05rem;
+    letter-spacing: 0.2em;
+    color: var(--steel-bright);
+    margin-bottom: 1rem;
+  }
+
+  .foot__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .foot__list a {
+    color: var(--paper-dim);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .foot__list a:hover {
+    color: var(--paper);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .foot__list--plain li {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: var(--paper-dim);
+  }
+
+  .foot__list--plain em {
+    font-style: normal;
+    color: var(--muted);
+  }
+
+  .foot__cta {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+
+  .foot__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    border-top: 1px solid var(--line-soft);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-block: 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+</style>

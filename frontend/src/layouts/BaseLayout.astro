@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const {
+  title,
+  description = "Capital City Mechanical — residential, commercial, and industrial plumbing across Central Ohio. 24/7 emergency service.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | Capital City Mechanical</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#101418" />
+    <link rel="canonical" href={Astro.url.href} />
+
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:title" content={`${title} | Capital City Mechanical`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Plumber",
+        name: "Capital City Mechanical",
+        logo: new URL("/logo.png", Astro.site).href,
+        image: new URL("/og-image.png", Astro.site).href,
+        telephone: "+1-614-871-8100",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "5929 Haughn Road",
+          addressLocality: "Grove City",
+          addressRegion: "OH",
+          postalCode: "43123",
+          addressCountry: "US",
+        },
+        areaServed: "Central Ohio",
+      })}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

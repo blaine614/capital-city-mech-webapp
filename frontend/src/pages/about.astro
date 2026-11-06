@@ -1,0 +1,334 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHead from "../components/PageHead.astro";
+import ServiceMarquee from "../components/ServiceMarquee.astro";
+import { MARQUEE_ITEMS } from "../data/site.js";
+
+// A real typed timeline — order carries information, so it is numbered by year.
+const timeline = [
+  {
+    year: "2001",
+    title: "Three people and a truck",
+    body: "Started in Grove City doing residential service work across the south end of Columbus.",
+  },
+  {
+    year: "2008",
+    title: "Commercial division",
+    body: "Added rough-in and build-out crews for schools, offices, and retail across Central Ohio.",
+  },
+  {
+    year: "2014",
+    title: "Industrial and welding",
+    body: "Took on process piping and certified welding for plants including Honda, Scotts, and Coca-Cola.",
+  },
+  {
+    year: "2019",
+    title: "Excavation and hydro",
+    body: "Brought digging in house so line replacements no longer wait on a subcontractor.",
+  },
+  {
+    year: "Today",
+    title: "40+ employees",
+    body: "One shop covering residential, commercial, and industrial work with 24/7 emergency dispatch.",
+  },
+];
+
+const values = [
+  {
+    title: "Train people, keep people",
+    body: "We pay for apprenticeship schooling because the fastest way to a good crew is building one.",
+  },
+  {
+    title: "Look before you quote",
+    body: "Camera the line, locate the utility, meter the circuit. A guess is not a diagnosis.",
+  },
+  {
+    title: "Leave it cleaner",
+    body: "Site restored, floor dry, and the old part left where you can see it.",
+  },
+  {
+    title: "Answer the phone",
+    body: "A person picks up. At 2 a.m., that is most of the job.",
+  },
+];
+---
+
+<BaseLayout
+  title="About Us"
+  description="Capital City Mechanical has grown from three people in 2001 to a 40+ employee plumbing, mechanical, and excavation contractor serving Central Ohio."
+>
+  <PageHead
+    eyebrow="Grove City, Ohio"
+    title="About us"
+    lede="We started in 2001 with three people and a truck. The work got bigger. The way we run a job site did not change."
+  />
+
+  <section class="band">
+    <div class="shell about-intro">
+      <div class="stack">
+        <p class="spec-tag">The company</p>
+        <h2>A shop, not a call center</h2>
+        <p class="lede">
+          Capital City Mechanical is a plumbing, mechanical, and excavation
+          contractor based in Grove City. We work for homeowners on the south
+          side, general contractors putting up schools, and plant managers who
+          measure a shutdown in dollars per minute.
+        </p>
+        <p>
+          What connects those three is boring and specific: certified people,
+          the right equipment on the truck, and a price you agreed to before
+          anyone started cutting. We have grown from three employees to more
+          than forty without handing the work to subcontractors we cannot
+          vouch for.
+        </p>
+        <p>
+          Our philosophy is that well-treated, well-trained, resource-rich
+          employees make everything else possible. That is why the tool
+          allowance, the schooling, and the take-home trucks exist — they are
+          how the work stays good.
+        </p>
+      </div>
+
+      <div class="factsheet">
+        <p class="factsheet__label">Company record</p>
+        <dl>
+          <div><dt>Founded</dt><dd>2001</dd></div>
+          <div><dt>Headquarters</dt><dd>Grove City, OH</dd></div>
+          <div><dt>Employees</dt><dd>40+</dd></div>
+          <div><dt>Service area</dt><dd>Central Ohio</dd></div>
+          <div><dt>Sectors</dt><dd>Residential · Commercial · Industrial</dd></div>
+          <div><dt>Emergency</dt><dd>24 / 7 dispatch</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <ServiceMarquee items={MARQUEE_ITEMS} />
+
+  <section class="band">
+    <div class="shell">
+      <p class="spec-tag">How we got here</p>
+      <h2>Company timeline</h2>
+
+      <ol class="timeline">
+        {
+          timeline.map((t) => (
+            <li class="tl">
+              <span class="tl__year">{t.year}</span>
+              <div class="tl__body">
+                <h4>{t.title}</h4>
+                <p>{t.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="band band--tint">
+    <div class="shell">
+      <p class="spec-tag">How we run</p>
+      <h2>What we hold to</h2>
+      <div class="grid grid--2 vals">
+        {
+          values.map((v) => (
+            <div class="card">
+              <h4>{v.title}</h4>
+              <p>{v.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shell cred">
+      <div>
+        <p class="spec-tag">Credentials</p>
+        <h2>Licensed and covered</h2>
+        <ul class="ticks">
+          <li>Ohio Construction Industry Licensing Board licensed contractor</li>
+          <li>Fully bonded and insured, certificates on request</li>
+          <li>Certified welders for industrial process piping</li>
+          <li>Backflow prevention testing certification</li>
+          <li>Background-checked and drug-tested technicians</li>
+        </ul>
+      </div>
+      <div class="cred__cta">
+        <h3>Want references?</h3>
+        <p class="dim">
+          Ask and we will send project references in your sector, not a generic
+          list.
+        </p>
+        <a class="btn btn--primary" href="/contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-intro {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .about-intro {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about-intro p:not(.lede):not(.spec-tag) {
+    color: var(--paper-dim);
+  }
+
+  .factsheet {
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--steel);
+    border-radius: 3px;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+    position: sticky;
+    top: 9rem;
+  }
+
+  .factsheet__label {
+    font-family: var(--display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .factsheet dl {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .factsheet dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px dashed var(--line);
+    padding-top: 0.75rem;
+  }
+
+  .factsheet dt {
+    font-size: 0.875rem;
+    color: var(--muted);
+    flex: none;
+  }
+
+  .factsheet dd {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+  }
+
+  .tl {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 620px) {
+    .tl {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+
+  .tl__year {
+    font-family: var(--display);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--orange);
+    letter-spacing: 0.02em;
+  }
+
+  .tl__body h4 {
+    margin-bottom: 0.35rem;
+  }
+
+  .tl__body p {
+    color: var(--paper-dim);
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  .vals {
+    margin-top: 2.5rem;
+  }
+
+  .cred {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .cred {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .ticks li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--paper-dim);
+  }
+
+  .ticks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--steel);
+  }
+
+  .cred__cta {
+    background: var(--ink-3);
+    border-left: 4px solid var(--orange);
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+  }
+
+  .cred__cta h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .cred__cta .btn {
+    margin-top: 1rem;
+  }
+</style>
