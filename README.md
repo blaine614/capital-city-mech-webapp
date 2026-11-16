@@ -47,6 +47,11 @@ and add that origin to `CORS_ORIGINS` on the backend.
 | GET | `/api/careers/postings` | Open roles on Careers |
 | POST | `/api/careers/applications` | Job application |
 | POST | `/api/contact` | Service request from Contact |
+| POST | `/api/portal/auth/login` | Employee portal sign-in |
+| POST | `/api/portal/auth/forgot` | Email a set-password link |
+| POST | `/api/portal/auth/set-password` | Set a password from an emailed link |
+| GET, PUT | `/api/portal/me` | The signed-in employee's own profile |
+| * | `/api/portal/admin/employees/**` | Office admins: add employees, job details, licenses |
 | GET | `/api/admin/contact-requests` | Office inbox (needs `X-Admin-Token`) |
 | GET | `/api/admin/applications` | Applications (needs `X-Admin-Token`) |
 | GET | `/actuator/health` | Health check |
@@ -67,6 +72,19 @@ DB_USER=capitalcity
 DB_PASSWORD=capitalcity
 CORS_ORIGINS=https://www.capitalcitymech.com
 ADMIN_TOKEN=<generate a real one>
+
+# Email (see "Email" below)
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USERNAME=
+SMTP_PASSWORD=
+MAIL_FROM=website@capitalcitymech.com
+MAIL_SERVICE_REQUESTS_TO=service@capitalcitymech.com
+MAIL_APPLICATIONS_TO=info@capitalcitymech.com
+
+# Employee portal (see "Employee portal" below)
+SITE_URL=https://www.capitalcitymech.com
+PORTAL_ADMIN_EMAIL=<the office manager's email>
 ```
 
 Frontend:
@@ -74,6 +92,63 @@ Frontend:
 ```
 PUBLIC_API_BASE=https://api.capitalcitymech.com
 ```
+
+## Email
+
+Every form submission is saved to Postgres first, then emailed:
+
+| Form | Goes to | Setting |
+| --- | --- | --- |
+| Contact page service request | `service@capitalcitymech.com` | `MAIL_SERVICE_REQUESTS_TO` |
+| Careers page application | `info@capitalcitymech.com` | `MAIL_APPLICATIONS_TO` |
+
+Reply-To is the visitor's address, so the office answers by hitting Reply.
+Emergency requests get `EMERGENCY:` at the front of the subject.
+
+The backend sends over SMTP, so it needs the four `SMTP_*` values from a mail
+service. With `SMTP_HOST` empty nothing is sent: each email is written to the
+backend log instead, which is how local development works.
+
+- `MAIL_FROM` must be an address on a domain the mail service is set up to send
+  for, or the messages land in spam.
+- `SMTP_PORT` must be a STARTTLS port (587, or the service's alternate such as
+  2587). Port 465 is not supported by the current settings.
+- Free Render web services block ports 25, 465, and 587. On a free instance,
+  use a service that offers another port, or move to a paid instance.
+- A failed send is logged (`Email to ... failed`) and never shown to the
+  visitor. The request is still in the database and in
+  `/api/admin/contact-requests`.
+
+## Employee portal
+
+`/portal` is linked from the top strip of every page (and from the mobile
+menu). Employees sign in with their email and a password they choose.
+
+**Accounts are invite-only.** Nobody can sign up on their own.
+
+1. Set `PORTAL_ADMIN_EMAIL` on the backend and restart it. That creates the
+   first office admin account, with no password yet.
+2. Open `/portal`, choose "First time here or forgot your password?", enter
+   that address, and follow the emailed link to set a password. (Without SMTP
+   configured, the link is in the backend log.)
+3. Sign in. Office admins get a **Team** tab: add an employee and they are
+   emailed a link, good for 7 days, to choose their own password.
+
+Who can change what:
+
+| | Employee | Office admin |
+| --- | --- | --- |
+| Name, phone, mailing address, emergency contact | Own profile | Their own profile |
+| Sign-in email, job title, department, hire date, supervisor | View only | Any employee |
+| Licenses and certifications (with expiration dates) | View only | Any employee |
+| Add, deactivate, or re-invite employees | No | Yes |
+
+Security notes: passwords are stored as BCrypt hashes; five wrong passwords
+lock an account for 15 minutes; sessions last 7 days and are stored hashed;
+setting a new password signs out every device; unticking "Can sign in" ends
+that person's sessions immediately. The sign-in token is kept in the browser's
+local storage, so the portal is only as private as the device it is used on:
+sign out on shared computers.
 
 ## Content
 
@@ -97,9 +172,9 @@ All tokens are CSS custom properties in `frontend/src/styles/global.css`.
 ## Before launch
 
 - [ ] Replace `ADMIN_TOKEN` and the Postgres password
-- [ ] Swap the admin token guard for Spring Security if the office needs logins
-- [ ] Wire an email or SMS notification into `ContactService.submit` so
-      emergency requests page dispatch instead of sitting in a table
+- [ ] Set the `SMTP_*` values and send a test request from the Contact page
+- [ ] Set `SITE_URL` and `PORTAL_ADMIN_EMAIL`, then set the first admin password
+- [ ] Add an SMS or phone alert for emergency requests if email is too slow
 - [ ] Add the real contractor license number in `Footer.astro`
 - [ ] Drop real job-site photography into `frontend/public/`
 - [ ] Add a captcha if bots find the forms

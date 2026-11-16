@@ -6,6 +6,8 @@ export const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
+export const PORTAL_LINK = { href: "/portal", label: "Employee portal" };
+
 export const PHONE = "(614) 871-8100";
 export const PHONE_HREF = "tel:+16148718100";
 export const EMAIL = "office@capitalcitymech.com";
