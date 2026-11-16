@@ -1,0 +1,28 @@
+---
+import "../../styles/portal.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import PortalApp from "../../components/portal/PortalApp.jsx";
+import { PHONE } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="Employee portal"
+  description="Sign-in for Capital City Mechanical employees."
+  noindex
+>
+  <PageHead
+    eyebrow="Capital City Mechanical staff"
+    title="Employee portal"
+    lede="Sign in to see your employee profile and keep your contact details current."
+  />
+
+  <section class="band">
+    <div class="shell">
+      <PortalApp client:only="react" officePhone={PHONE} />
+      <noscript>
+        <p class="dim">The employee portal needs JavaScript turned on in your browser.</p>
+      </noscript>
+    </div>
+  </section>
+</BaseLayout>

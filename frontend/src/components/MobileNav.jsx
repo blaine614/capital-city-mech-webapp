@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function MobileNav({ links, phone, phoneHref }) {
+export default function MobileNav({ links, phone, phoneHref, portal }) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
   const triggerRef = useRef(null);
@@ -58,6 +58,11 @@ export default function MobileNav({ links, phone, phoneHref }) {
           <a className="btn btn--primary mnav__call" href={phoneHref}>
             Call {phone}
           </a>
+          {portal && (
+            <a className="btn btn--ghost mnav__portal" href={portal.href}>
+              {portal.label}
+            </a>
+          )}
           <img
             className="mnav__logo"
             src="/logo.png"
@@ -121,6 +126,7 @@ export default function MobileNav({ links, phone, phoneHref }) {
         }
 
         .mnav__call { width: 100%; }
+        .mnav__portal { width: 100%; margin-top: -0.5rem; }
 
         /* Decorative here — the header already names the company. */
         .mnav__logo {

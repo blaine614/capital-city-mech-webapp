@@ -23,6 +23,20 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
+  mail:
+    # Outgoing mail server. Leave SMTP_HOST empty and emails are written to the
+    # log instead of sent, which is what you want on a laptop.
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.connectiontimeout: 10000
+      mail.smtp.timeout: 10000
+      mail.smtp.writetimeout: 10000
+
 server:
   port: ${PORT:8080}
   error:
@@ -36,8 +50,26 @@ app:
   admin:
     # Shared secret required on admin read endpoints. Replace before deploying.
     token: ${ADMIN_TOKEN:change-me}
+  mail:
+    # Address the website sends from. Must be on a domain your mail service
+    # is allowed to send for.
+    from: ${MAIL_FROM:website@capitalcitymech.com}
+    # Where Contact page service requests are delivered.
+    service-requests-to: ${MAIL_SERVICE_REQUESTS_TO:service@capitalcitymech.com}
+    # Where Careers page job applications are delivered.
+    applications-to: ${MAIL_APPLICATIONS_TO:info@capitalcitymech.com}
+  portal:
+    # Public address of the website, used to build links in portal emails.
+    site-url: ${SITE_URL:http://localhost:4321}
+    # First office (admin) account. Created on startup if it does not exist;
+    # set its password from the portal's "First time here" link.
+    admin-email: ${PORTAL_ADMIN_EMAIL:}
 
 management:
+  health:
+    mail:
+      # Keep the health check about the app, not the mail provider.
+      enabled: false
   endpoints:
     web:
       exposure:

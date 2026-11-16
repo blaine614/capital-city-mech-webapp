@@ -1,6 +1,6 @@
 ---
 import MobileNav from "./MobileNav.jsx";
-import { NAV_LINKS, PHONE, PHONE_HREF } from "../data/site.js";
+import { NAV_LINKS, PHONE, PHONE_HREF, PORTAL_LINK } from "../data/site.js";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
@@ -10,6 +10,13 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     <span class="masthead__alert-dot" aria-hidden="true"></span>
     <span>Emergency crews on call 24/7</span>
     <a href={PHONE_HREF}>{PHONE}</a>
+    <a
+      class="masthead__portal"
+      href={PORTAL_LINK.href}
+      aria-current={path.startsWith(PORTAL_LINK.href) ? "page" : undefined}
+    >
+      {PORTAL_LINK.label}
+    </a>
   </div>
 
   <div class="shell masthead__bar">
@@ -36,7 +43,13 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
     <a class="btn btn--primary masthead__cta" href="/contact">Request service</a>
 
-    <MobileNav client:load links={NAV_LINKS} phone={PHONE} phoneHref={PHONE_HREF} />
+    <MobileNav
+      client:load
+      links={NAV_LINKS}
+      phone={PHONE}
+      phoneHref={PHONE_HREF}
+      portal={PORTAL_LINK}
+    />
   </div>
 </header>
 
@@ -65,10 +78,38 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     padding: 0.45rem 1rem;
   }
 
-  .masthead__alert a {
+  .masthead__alert {
+    position: relative;
+  }
+
+  .masthead__alert a:not(.masthead__portal) {
     color: #fff;
     text-decoration: none;
     border-bottom: 2px solid var(--orange);
+  }
+
+  /* Staff sign-in. Sits at the far right of the top strip on every page;
+     on small screens it moves into the mobile menu instead. */
+  .masthead__portal {
+    position: absolute;
+    right: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--paper);
+    text-decoration: none;
+    border: 1px solid rgba(238, 242, 244, 0.45);
+    border-radius: 2px;
+    padding: 0.12rem 0.7rem;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+    transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+  }
+
+  .masthead__portal:hover,
+  .masthead__portal[aria-current="page"] {
+    background: var(--paper);
+    border-color: var(--paper);
+    color: var(--ink);
   }
 
   .masthead__alert-dot {
@@ -140,9 +181,18 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     border-bottom-color: var(--orange);
   }
 
+  /* Mid-width screens: slide the emergency line left so it clears the portal link. */
+  @media (min-width: 901px) and (max-width: 1100px) {
+    .masthead__alert {
+      justify-content: flex-start;
+      padding-left: var(--gutter);
+    }
+  }
+
   @media (max-width: 900px) {
     .masthead__nav,
-    .masthead__cta {
+    .masthead__cta,
+    .masthead__portal {
       display: none;
     }
   }
