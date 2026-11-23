@@ -53,7 +53,7 @@ app:
   mail:
     # Address the website sends from. Must be on a domain your mail service
     # is allowed to send for.
-    from: ${MAIL_FROM:website@capitalcitymech.com}
+    from: ${MAIL_FROM:blaine@capitalcitymech.com}
     # Where Contact page service requests are delivered.
     service-requests-to: ${MAIL_SERVICE_REQUESTS_TO:service@capitalcitymech.com}
     # Where Careers page job applications are delivered.
