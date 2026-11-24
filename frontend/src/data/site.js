@@ -10,7 +10,7 @@ export const PORTAL_LINK = { href: "/portal", label: "Employee portal" };
 
 export const PHONE = "(614) 871-8100";
 export const PHONE_HREF = "tel:+16148718100";
-export const EMAIL = "office@capitalcitymech.com";
+export const EMAIL = "info@capitalcitymech.com";
 
 export const ADDRESS = {
   street: "5929 Haughn Road",
