@@ -55,7 +55,7 @@ app:
     # is allowed to send for.
     from: ${MAIL_FROM:blaine@capitalcitymech.com}
     # Where Contact page service requests are delivered.
-    service-requests-to: ${MAIL_SERVICE_REQUESTS_TO:service@capitalcitymech.com}
+    service-requests-to: ${MAIL_SERVICE_REQUESTS_TO:blaine@capitalcitymech.com}
     # Where Careers page job applications are delivered.
     applications-to: ${MAIL_APPLICATIONS_TO:info@capitalcitymech.com}
   portal:
